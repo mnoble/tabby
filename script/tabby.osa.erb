@@ -1,0 +1,21 @@
+tell application "iTerm"
+    if (count of terminals) is equal to 0 then
+        set term to (make new terminal)
+    else
+        set term to (current terminal)
+    end if
+
+    tell term
+        tell (current session)
+            write text "cd <%= basedir %>"
+            write text "clear"
+        end tell
+
+        tell (launch session "Default")
+            set name to "<%= title %>"
+            write text "cd <%= basedir %>"
+            write text "clear"
+            <%= commands %>
+        end tell
+    end tell
+end tell
