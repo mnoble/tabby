@@ -36,7 +36,7 @@ Each tab will start off by `cd`'ing into the environment's `basedir`. Then it wi
 ### Starting An Environment
     tabby blog
 
-![tabby](https://github.com/mnoble/tabby/raw/master/screenshot.jpg)
+![tabby](https://github.com/mnoble/tabby/raw/master/screenshot.png)
 
 ## License
 See LICENSE
