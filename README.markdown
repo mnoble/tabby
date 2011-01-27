@@ -6,20 +6,20 @@ Tabby is a simple iTerm2 environment configuration tool. It allows you to create
 ### Defining Environments
 Environments should be stored in `~/.tabby/`, using a simple and short name. We'll walk through building my `~/.tabby/blog.rb` environment.
 
-Tabby environments are just regular Ruby classes. The filename and classname should match, with the classname being uppercase:
+Tabby environments are just regular Ruby classes. The filename and classname should match, with the classname following regular Ruby standards:
 
-    class Blog < Tabby
+    class Blog < Tabby::Base
     end
 
 Define your project's root directory with `basedir`:
 
-    class Blog < Tabby
+    class Blog < Tabby::Base
       basedir "~/Dev/Blog"
     end
 
-Creating tabs is just a matter of creating methods. Each method name will be the the tab's title, replacing underscores with spaces.
+Creating tabs is just a matter of creating methods. There should be one method per tab. The method name becomes the tab's title; replacing underscores with spaces.
 
-    class Blog < Tabby
+    class Blog < Tabby::Base
       basedir "~/Dev/Blog"
       
       def jekyll

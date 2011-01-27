@@ -1,18 +1,20 @@
 require "erb"
 require "tempfile"
-require "ostruct"
 
 module Tabby
   class Base
-    class << self
-      attr_reader :_basedir
-    
-      def basedir(dir)
-        @_basedir = dir
-      end
+    class << self; attr_reader :_basedir; end
+
+    # Sets the project root directory.
+    #
+    # Parameters:
+    #    dir  Project's root directory path
+    #
+    def self.basedir(dir)
+      @_basedir = dir
     end
 
-    # List of commands for the current tab being created.
+    # List of commands for the current tab to execute.
     attr_accessor :commands
 
     # Title of the current tab being created.
@@ -53,17 +55,16 @@ module Tabby
     def basedir
       self.class._basedir
     end
-  
+
   private
 
     def create_tab
-      source   = render_script
       tempfile = Tempfile.new("tabby-#{@title}")
       tempfile.write(render_script)
       tempfile.close
       Kernel.system("osascript #{tempfile.path}")
     end
-  
+
     def render_script
       osapath   = File.expand_path("../../script/tabby.osa.erb", __FILE__)
       template  = ERB.new(File.read(osapath))

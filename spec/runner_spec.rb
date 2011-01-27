@@ -2,23 +2,26 @@ require File.expand_path("../spec_helper", __FILE__)
 require File.expand_path("../.tabby/spec_blog", __FILE__)
 
 describe Tabby::Runner do
-  let(:output) { [] }
-  subject      { Tabby::Runner.new(["blog"]) }
+  subject { Tabby::Runner.new(["blog"]) }
   
   before :each do
-    Kernel.stub(:system) { Proc.new { |s| output << s }}
+    Kernel.stub(:system)
   end
 
   it "should tell the user when the project file is missing" do
-    subject.should_receive(:require).and_raise(LoadError)
-    subject.should_receive(:puts).with(/does not exist/)
-    subject.start
+    with_stubbed_stdout do |output|
+      subject.should_receive(:require).and_raise(LoadError)
+      subject.start
+      output.should include "does not exist"
+    end
   end
 
   it "should tell the user when the filename and classname don't match" do
-    ObjectSpace.class.should_receive(:const_get).and_raise(NameError)
-    subject.should_receive(:puts).with(/mismatch/)
-    subject.start
+    with_stubbed_stdout do |output|
+      ObjectSpace.class.should_receive(:const_get).and_raise(NameError)
+      subject.start
+      output.should include "mismatch"
+    end
   end
 
   it "should call the Tabby class" do
