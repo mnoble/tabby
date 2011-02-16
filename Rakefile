@@ -6,4 +6,5 @@ RSpec::Core::RakeTask.new do |spec|
   spec.rspec_opts = ["--format=doc", "--fail-fast", "--color"]
 end
 
+task :test => :spec
 task :default => :spec
