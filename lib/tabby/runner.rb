@@ -16,8 +16,10 @@ module Tabby
     def start
       require File.join(TABBYDIR, "#{@project}.rb")
       ObjectSpace.class.const_get(@klass).new.call
+
     rescue LoadError
       puts "=> ERROR: Project (#{TABBYDIR}/#{@project}.rb) does not exist."
+
     rescue NameError
       puts "=> ERROR: Project filename/classname mismatch."
       puts "   Filename is:          #{@project}.rb"

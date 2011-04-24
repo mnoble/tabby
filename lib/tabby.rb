@@ -1,7 +1,11 @@
 require "erb"
 require "tempfile"
+require "pathname"
 
 module Tabby
+  ROOT     = Pathname.new(File.dirname(__FILE__) + "/../")
+  TABBYDIR = Pathname.new("~/.tabby").expand_path
+
   class Base
     class << self; attr_reader :_basedir; end
 

@@ -18,5 +18,6 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.markdown", "screenshot.png"]
   s.require_paths    = ["lib"]
 
-  s.add_development_dependency "rspec", "~> 2.1.0"
+  s.add_development_dependency "rspec",         "~> 2.1.0"
+  s.add_development_dependency "mnoble-fakefs", ">= 0.3.1"
 end

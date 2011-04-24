@@ -1,4 +1,4 @@
-require File.expand_path("../spec_helper", __FILE__)
+require File.dirname(__FILE__) + '/../spec_helper'
 
 class TabbySpecBlog < Tabby::Base
   basedir "~/Dev/Blog"
@@ -8,8 +8,16 @@ class TabbySpecBlog < Tabby::Base
   end
 end
 
+class FakeFile < StringIO
+  def path; "/tmp/#{object_id}"; end
+end
+
 describe Tabby::Base do
-  before  { Kernel.stub(:system) }
+  before do
+    Tempfile.stub(:new).and_return(FakeFile.new)
+    FakeFS.deactivate!
+  end
+
   subject { TabbySpecBlog.new }
 
   it "should set a base directory" do
@@ -30,7 +38,7 @@ describe Tabby::Base do
     subject.call
     subject.template.should match /launch session "Default"/
   end
-  
+
   it "should set the title" do
     subject.call
     subject.template.should match /set name to "foo"/
@@ -40,7 +48,7 @@ describe Tabby::Base do
     subject.call
     subject.template.should match %r{write text "cd ~/Dev/Blog"}
   end
-  
+
   it "should execute all commands" do
     subject.call
     subject.template.should match /write text "whoami"/

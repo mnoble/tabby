@@ -1,0 +1,7 @@
+class <%= klass %> < Tabby::Base
+  basedir "~/Dev/<%= project %>"
+
+  def server
+    exec "rails s"
+  end
+end
