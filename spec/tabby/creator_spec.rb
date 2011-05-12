@@ -2,16 +2,12 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Tabby::Creator do
   let(:basedir) { Tabby::TABBYDIR }
-  let(:path)    { Pathname.new("~/.tabby/helicopter.rb") }
+  let(:path)    { basedir.join("helicopter.rb") }
   let(:creator) { Tabby::Creator.new("helicopter") }
 
   before do
-    FakeSTDOUT.activate!
+    FakeFS.activate!
     creator.run!
-  end
-
-  after do
-    FakeSTDOUT.deactivate!
   end
 
   it "should create the tabby directory if it is missing" do
@@ -51,8 +47,13 @@ class Helicopter < Tabby::Base
 end
     PROJECT
   end
-
-  it "should description" do
-    p "SOMETHING"
+  
+  it "should know if it already exists or not" do
+    creator.should exist
+  end
+  
+  it "should not create projects that already exist" do
+    creator.run!
+    stdout.should include "Project already exists."
   end
 end

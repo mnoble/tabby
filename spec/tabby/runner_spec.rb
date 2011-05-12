@@ -2,35 +2,36 @@ require File.dirname(__FILE__) + "/../spec_helper"
 require File.dirname(__FILE__) + "/../.tabby/spec_blog"
 
 describe Tabby::Runner do
-  let(:tabbydir) { File.expand_path("../../.tabby", __FILE__) }
-  let(:runner)   { Tabby::Runner.new(["spec_blog"]) }
+  let(:tabbydir) { Pathname.new(File.dirname(__FILE__) + "/../.tabby").expand_path }
+  let(:runner)   { Tabby::Runner.new("spec_blog") }
 
   before do
-    Tabby::Runner.stub_constant(:TABBYDIR => tabbydir)
-    FakeSTDOUT.activate!
+    Tabby::Base.stub(:new).and_return(mock.as_null_object)
   end
 
-  after do
-    Tabby::Runner.unstub_constant(:TABBYDIR)
-    FakeSTDOUT.deactivate!
+  it "should convert an underscored project to hyphenated" do
+    Tabby::Runner.new("time_cop").dasherize.should == "time-cop"
   end
 
-  it "should tell the user when the project file is missing" do
-    runner.stub(:require).and_raise(LoadError)
-    runner.start
-    output.should include "does not exist"
+  it "should determine the class of a project with underscores" do
+    Tabby::Runner.new("time_cop").klass.should == :TimeCop
   end
 
-  it "should tell the user when the filename and classname don't match" do
-    ObjectSpace.class.stub(:const_get).and_raise(NameError)
-    Tabby::Runner.new(["mismatch"]).start
-    output.should include "mismatch"
+  it "should determine the class of a project with hyphens" do
+    Tabby::Runner.new("time-cop").klass.should == :TimeCop
   end
 
-  it "should call the Tabby class" do
-    blog = SpecBlog.new
-    blog.should_receive(:call)
-    SpecBlog.stub(:new) { blog }
-    runner.start
+  it "should determine the class of a project with underscores and hyphens" do
+    Tabby::Runner.new("jean-claude_van_damme").klass.should == :JeanClaudeVanDamme
+  end
+
+  it "should find the project file" do
+    runner.should_receive(:require).with(tabbydir.join("spec_blog.rb"))
+    runner.run!
+  end
+  
+  it "should call the project class" do
+    SpecBlog.should_receive(:new).and_return(mock.as_null_object)
+    runner.run!
   end
 end

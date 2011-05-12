@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require "tabby"
-require "tabby/runner"
-Tabby::Runner.new(ARGV.dup).start
+require "tabby/cli"
+Tabby::CLI.start(ARGV.dup)

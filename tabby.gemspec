@@ -1,10 +1,9 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "tabby/version"
 
 Gem::Specification.new do |s|
   s.name        = "tabby"
-  s.version     = Tabby::VERSION
+  s.version     = "0.0.2"
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["Matte Noble"]
   s.email       = ["me@mattenoble.com"]
@@ -18,6 +17,11 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ["README.markdown", "screenshot.png"]
   s.require_paths    = ["lib"]
 
+  # Runtime
+  s.add_dependency "thor", "~> 0.14.6"
+
+  # Development
   s.add_development_dependency "rspec",         "~> 2.1.0"
+  s.add_development_dependency "fakeout",       ">= 0.0.1"
   s.add_development_dependency "mnoble-fakefs", ">= 0.3.1"
 end

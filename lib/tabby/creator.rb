@@ -10,9 +10,20 @@ module Tabby
     end
 
     def run!
-      create_project_directory
-      create_project_file
+      if exists?
+        puts ">> Project already exists."
+      else
+        create_project_directory
+        create_project_file
+        puts ">> Successfully created #{@project}."
+        Tabby::Editor.new(@project).run!
+      end
     end
+
+    def exist?
+      project_path.exist?
+    end
+    alias :exists? :exist?
 
     def create_project_directory
       FileUtils.mkdir_p(TABBYDIR) unless File.directory?(TABBYDIR)
@@ -23,7 +34,7 @@ module Tabby
     end
 
     def project_path
-      TABBYDIR.join("#{project}.rb")
+      TABBYDIR.join("#{project}.rb").expand_path
     end
 
     def klass

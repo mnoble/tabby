@@ -8,10 +8,6 @@ class TabbySpecBlog < Tabby::Base
   end
 end
 
-class FakeFile < StringIO
-  def path; "/tmp/#{object_id}"; end
-end
-
 describe Tabby::Base do
   before do
     Tempfile.stub(:new).and_return(FakeFile.new)

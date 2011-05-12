@@ -1,29 +1,22 @@
 module Tabby
   class Runner
-    TABBYDIR = File.expand_path("~/.tabby")
-
-    # Project name, should be the filename in ~/.tabby.
     attr_reader :project
 
-    def initialize(argv)
-      @project = argv[0]
-      @klass   = @project.split("_").map { |p| p.capitalize }.join.to_sym
+    def initialize(project)
+      @project = project
     end
 
-    # Loads the environment file (from ~/.tabby), finds the class
-    # which matches the filename and +call+s it.
-    #
-    def start
-      require File.join(TABBYDIR, "#{@project}.rb")
-      ObjectSpace.class.const_get(@klass).new.call
+    def dasherize
+      @project.gsub("_", "-")
+    end
 
-    rescue LoadError
-      puts "=> ERROR: Project (#{TABBYDIR}/#{@project}.rb) does not exist."
+    def klass
+      @project.split(/_|-/).map { |p| p.capitalize }.join.to_sym
+    end
 
-    rescue NameError
-      puts "=> ERROR: Project filename/classname mismatch."
-      puts "   Filename is:          #{@project}.rb"
-      puts "   Classname should be:  #{@klass}"
+    def run!
+      require TABBYDIR.join("#{@project}.rb")
+      ObjectSpace.class.const_get(klass).new.call
     end
   end
 end
